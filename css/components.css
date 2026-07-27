@@ -1,0 +1,65 @@
+/* KPI grid */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.kpi-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);padding:16px 18px;position:relative;overflow:hidden}
+.kpi-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--brand-soft);border-radius:0 0 var(--r-m) var(--r-m)}
+.kpi-card.c-accent::after{background:var(--accent-soft)}
+.kpi-card.c-success::after{background:var(--success-soft)}
+.kpi-card.c-warn::after{background:var(--warn-soft)}
+.kpi-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
+.kpi-label{font-size:12px;color:var(--ink-2);font-weight:600}
+.kpi-icon-wrap{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex:none}
+.kpi-icon-wrap svg{width:14px;height:14px}
+.kpi-val{font-family:var(--font-d);font-size:28px;font-weight:700;letter-spacing:-.03em;line-height:1;margin-bottom:6px}
+.kpi-delta{font-size:11.5px;font-weight:600;display:flex;align-items:center;gap:3px}
+.kpi-delta svg{width:11px;height:11px}
+.delta-up{color:var(--success)}
+.delta-down{color:var(--danger)}
+.delta-neutral{color:var(--ink-3)}
+
+/* Tags */
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:99px}
+.tag-success{background:var(--success-soft);color:var(--success)}
+.tag-warn{background:var(--warn-soft);color:var(--warn)}
+.tag-danger{background:var(--danger-soft);color:var(--danger)}
+.tag-info{background:var(--info-soft);color:var(--info)}
+.tag-neutral{background:var(--surface-3);color:var(--ink-2)}
+.tag-accent{background:var(--accent-soft);color:var(--accent-2)}
+.tag-brand{background:var(--brand-soft);color:var(--brand)}
+
+/* Toolbar / Chips */
+.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.toolbar .sp{flex:1}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:var(--r-s);border:1px solid var(--line);background:var(--surface);font-size:12.5px;font-weight:500;color:var(--ink-2);cursor:pointer;user-select:none}
+.chip:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-soft)}
+.chip.is-on{border-color:var(--brand);color:var(--brand);background:var(--brand-soft)}
+.chip svg{width:13px;height:13px}
+
+/* Seg */
+.seg{display:flex;border:1px solid var(--line);border-radius:var(--r-s);overflow:hidden}
+.seg button{padding:7px 11px;background:var(--surface);border:none;font-size:12.5px;font-weight:600;color:var(--ink-3);display:flex;align-items:center;gap:5px}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.is-on{background:var(--brand-soft);color:var(--brand)}
+.seg button svg{width:13px;height:13px}
+
+/* Table */
+.tbl-wrap{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);font-weight:600;padding:10px 14px;background:var(--surface-2);border-bottom:1px solid var(--line);white-space:nowrap;user-select:none}
+tbody td{padding:11px 14px;border-bottom:1px solid var(--line-2);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--surface-2)}
+.mono{font-family:var(--font-m);font-size:11.5px;color:var(--ink-3)}
+.cell-name{display:flex;align-items:center;gap:9px}
+.cell-name .t{font-weight:600;font-size:13px}
+.cell-name .s{font-size:11.5px;color:var(--ink-3)}
+.swatch{width:28px;height:28px;border-radius:7px;flex:none;border:1px solid rgba(0,0,0,.08)}
+
+/* Progress */
+.progress{height:6px;background:var(--surface-3);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;border-radius:99px;transition:width .5s ease}
+
+/* Grid helpers */
+.grid-2{display:grid;grid-template-columns:1.6fr 1fr;gap:18px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+

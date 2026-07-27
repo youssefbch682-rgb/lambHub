@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Lamberet Decoration Hub — v3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/modules.css">
+<link rel="stylesheet" href="css/ui.css">
+<link rel="stylesheet" href="css/documents.css">
+</head>
+<body>
+<div class="shell">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+    </div>
+    <div class="brand-name">
+      <strong>Lamberet</strong>
+      <span>Decoration Hub v3</span>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Navigation</div>
+    <div class="nav-item active" onclick="goTo('dashboard')" id="nav-dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item" onclick="goTo('adhesifs')" id="nav-adhesifs">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Stock adhésifs
+      <span class="nav-badge alert" id="alertBadge">0</span>
+    </div>
+    <div class="nav-item" onclick="goTo('realisations')" id="nav-realisations">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+      Réalisations
+      <span class="nav-badge" id="realBadge">0</span>
+    </div>
+    <div class="nav-item" onclick="goTo('kpi')" id="nav-kpi">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+      KPI Satisfaction
+    </div>
+    <div class="nav-item" onclick="goTo('maquettes')" id="nav-maquettes">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3 7 12 13 21 7"/></svg>
+      Fonds de maquette
+    </div>
+    <div class="nav-item" onclick="goTo('social')" id="nav-social">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      Réseaux sociaux
+    </div>
+    <div class="nav-item" onclick="goTo('assistant')" id="nav-assistant">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 4-3 6-3 9H8c0-3-3-5-3-9a7 7 0 0 1 7-7z"/><line x1="8.5" y1="21" x2="15.5" y2="21"/><line x1="12" y1="21" x2="12" y2="23"/></svg>
+      Assistant IA
+    </div>
+    <div class="nav-item" onclick="goTo('direction')" id="nav-direction">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Vue Direction
+    </div>
+    <div class="nav-item" onclick="goTo('donnees')" id="nav-donnees">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+      Gestion données
+    </div>
+    <div class="nav-item" onclick="goTo('documents')" id="nav-documents">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Documents
+      <span class="nav-badge" id="docBadge">0</span>
+    </div>
+    <div class="nav-item" onclick="goTo('planning')" id="nav-planning">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="3" x2="8" y2="6"/><line x1="16" y1="3" x2="16" y2="6"/></svg>
+      Planning
+    </div>
+    <div class="nav-item" onclick="goTo('roadmap')" id="nav-roadmap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      Roadmap
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-row">
+      <div class="avatar">CM</div>
+      <div class="user-info">
+        <strong>Camille M.</strong>
+        <span>Responsable Décoration</span>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="page-icon" id="pageIcon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      </div>
+      <div>
+        <div class="page-title" id="pageTitle">Dashboard</div>
+        <div style="font-size:11px;color:var(--ink-3);font-weight:500" id="pageDate"></div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="Recherche globale… (Entrée)" id="globalSearch" onkeydown="if(event.key==='Enter')globalSearchFn(this.value)">
+      </div>
+      <button class="icon-btn" onclick="exportAllData()" title="Exporter toutes les données">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </button>
+      <button class="icon-btn" style="position:relative" onclick="goTo('kpi')" title="Alertes">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-dot" id="globalNotifDot" style="display:none"></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ===== PAGE: DASHBOARD ===== -->
+    <section class="page active" data-page="dashboard" id="page-dashboard">
+      <div class="kpi-grid" id="dashKpiGrid"><!-- rendered by JS --></div>
+      <div class="grid-2" style="margin-bottom:18px">
+        <div class="card card-pad">
+          <div class="section-header"><span class="section-title">Alertes stock</span><button class="btn btn-ghost btn-sm" onclick="goTo('adhesifs')">Voir tout</button></div>
+          <div id="dashAlerts"></div>
+        </div>
+        <div class="card card-pad">
+          <div class="section-header"><span class="section-title">Réalisations récentes</span><button class="btn btn-ghost btn-sm" onclick="goTo('realisations')">Voir tout</button></div>
+          <div id="dashRecent"></div>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="card card-pad">
+          <div class="section-header" style="margin-bottom:10px"><span class="section-title">Satisfaction</span></div>
+          <div class="nps-num" id="dashNPS">—</div>
+          <div class="nps-label">Note moyenne / 5</div>
+        </div>
+        <div class="card card-pad">
+          <div class="section-header" style="margin-bottom:10px"><span class="section-title">Réseaux sociaux</span></div>
+          <div class="nps-num" id="dashEngagement">—</div>
+          <div class="nps-label">Taux d'engagement moyen</div>
+        </div>
+        <div class="card card-pad">
+          <div class="section-header" style="margin-bottom:10px"><span class="section-title">Maquettes</span></div>
+          <div class="nps-num" id="dashMaquettes">—</div>
+          <div class="nps-label">Fonds disponibles</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: ADHÉSIFS ===== -->
+    <section class="page" data-page="adhesifs" id="page-adhesifs">
+      <div class="kpi-grid" id="adhesifKpiGrid"><!-- rendered --></div>
+      <div class="tabs">
+        <button class="tab-btn active-tab" data-tab="adh-list" onclick="switchTab('adh','list')">Liste</button>
+        <button class="tab-btn" data-tab="adh-plan" onclick="switchTab('adh','plan')">Plan de stockage</button>
+        <button class="tab-btn" data-tab="adh-mvt" onclick="switchTab('adh','mvt')">Mouvements</button>
+      </div>
+
+      <!-- Tab Liste -->
+      <div id="tab-adh-list" class="tab-content active-tab">
+        <div class="toolbar">
+          <div class="search-box" style="width:260px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" placeholder="Référence, couleur, fournisseur…" id="adhesifSearch" oninput="filterAdhesifs()">
+          </div>
+          <select id="adhFiltSupplier" onchange="filterAdhesifs()" style="padding:7px 10px;border:1px solid var(--line);border-radius:var(--r-s);font-size:12.5px;color:var(--ink-2);background:var(--surface)"><option value="">Tous fournisseurs</option></select>
+          <select id="adhFiltColor" onchange="filterAdhesifs()" style="padding:7px 10px;border:1px solid var(--line);border-radius:var(--r-s);font-size:12.5px;color:var(--ink-2);background:var(--surface)"><option value="">Toutes couleurs</option></select>
+          <select id="adhFiltZone" onchange="filterAdhesifs()" style="padding:7px 10px;border:1px solid var(--line);border-radius:var(--r-s);font-size:12.5px;color:var(--ink-2);background:var(--surface)"><option value="">Toutes zones</option></select>
+          <button class="btn btn-ghost btn-sm" id="adhFiltReset" onclick="resetAdhesifFilters()" style="display:none">✕ Réinitialiser</button>
+          <div class="chip is-on" onclick="filterAdhesifStatus('all',this)" id="chip-all">Tous</div>
+          <div class="chip" onclick="filterAdhesifStatus('low',this)" id="chip-low">Alertes</div>
+          <div class="chip" onclick="filterAdhesifStatus('ok',this)" id="chip-ok">Normal</div>
+          <div class="sp"></div>
+          <button class="btn btn-ghost" onclick="importCSV('adhesifs')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Importer CSV
+          </button>
+          <button class="btn btn-ghost" onclick="exportModule('adhesifs')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exporter
+          </button>
+          <button class="btn btn-primary" onclick="openAdhesifModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>Ajouter
+          </button>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>Réf.</th><th>Couleur</th><th>Désignation</th><th>Fournisseur</th>
+              <th>Emplacement</th><th>Qté (rouleaux)</th><th>Longueur (m)</th><th>Statut</th><th></th>
+            </tr></thead>
+            <tbody id="adhesifBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Plan -->
+      <div id="tab-adh-plan" class="tab-content">
+        <div class="stock-plan">
+          <div>
+            <div class="section-header" style="margin-bottom:12px">
+              <span class="section-title">Plan d'entrepôt interactif</span>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-ghost btn-sm" onclick="openZoneModal()">+ Ajouter une zone</button>
+                <button class="btn btn-ghost btn-sm" onclick="openSlotModal()">+ Ajouter un emplacement</button>
+              </div>
+            </div>
+            <div id="warehouseZones"></div>
+            <div class="rack-legend" style="margin-top:14px">
+              <div class="rack-legend-item"><div class="rack-legend-dot" style="background:var(--success-soft);border:1px solid var(--success)"></div>Stock correct</div>
+              <div class="rack-legend-item"><div class="rack-legend-dot" style="background:var(--warn-soft);border:1px solid var(--warn)"></div>Proche du seuil</div>
+              <div class="rack-legend-item"><div class="rack-legend-dot" style="background:var(--danger-soft);border:1px solid var(--danger)"></div>Stock faible</div>
+              <div class="rack-legend-item"><div class="rack-legend-dot" style="background:var(--surface-2);opacity:.6;border:1px solid var(--line-2)"></div>Emplacement vide</div>
+              <div class="rack-legend-item"><div class="rack-legend-dot" style="background:var(--brand-soft);border:1px solid var(--brand)"></div>Sélectionné</div>
+            </div>
+          </div>
+          <div>
+            <div class="card card-pad">
+              <div class="section-header"><span class="section-title" style="font-size:13px">Détail emplacement</span></div>
+              <div id="rackDetail" style="font-size:12.5px;color:var(--ink-3);text-align:center;padding:20px 0">Cliquez sur un emplacement</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Mouvements -->
+      <div id="tab-adh-mvt" class="tab-content">
+        <div class="toolbar">
+          <div class="chip is-on" onclick="filterMvt('all',this)">Tous</div>
+          <div class="chip" onclick="filterMvt('in',this)">Entrées</div>
+          <div class="chip" onclick="filterMvt('out',this)">Sorties</div>
+          <div class="chip" onclick="filterMvt('alert',this)">Alertes</div>
+          <div class="sp"></div>
+          <button class="btn btn-ghost btn-sm" onclick="undoLastMovement()">↩ Annuler le dernier mouvement</button>
+          <button class="btn btn-ghost btn-sm" onclick="openMvtModal()">+ Enregistrer un mouvement</button>
+        </div>
+        <div class="card card-pad"><div id="mvtLog"></div></div>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: RÉALISATIONS ===== -->
+    <section class="page" data-page="realisations" id="page-realisations">
+      <div class="toolbar">
+        <div class="search-box" style="width:260px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" placeholder="Client, secteur, couleur…" id="realSearch" oninput="filterRealisations()">
+        </div>
+        <div class="chip is-on" onclick="filterRealSector('Tous',this)">Tous</div>
+        <div class="chip" onclick="filterRealSector('Transport alimentaire',this)">Alimentaire</div>
+        <div class="chip" onclick="filterRealSector('Pharma',this)">Pharma</div>
+        <div class="chip" onclick="filterRealSector('Logistique',this)">Logistique</div>
+        <div class="sp"></div>
+        <button class="btn btn-ghost" onclick="openDropzone()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import fichiers
+        </button>
+        <button class="btn btn-primary" onclick="openRealisationModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>Ajouter
+        </button>
+      </div>
+      <div class="gallery" id="galleryGrid"></div>
+      <div id="realEmptyState" style="display:none">
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
+          <div class="title">Aucune réalisation</div>
+          <div class="desc">Commencez par ajouter votre première réalisation client.</div>
+          <button class="btn btn-primary" onclick="openRealisationModal()">+ Ajouter une réalisation</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: KPI ===== -->
+    <section class="page" data-page="kpi" id="page-kpi">
+      <div class="kpi-grid" id="kpiGrid"><!-- rendered --></div>
+      <div class="grid-2" style="margin-bottom:18px">
+        <div class="card card-pad">
+          <div class="section-header"><span class="section-title">Satisfaction par critère</span></div>
+          <div id="kpiCriteres"></div>
+        </div>
+        <div class="card card-pad">
+          <div class="section-header"><span class="section-title">Évolution mensuelle</span></div>
+          <div class="bar-viz" id="kpiBarViz"></div>
+        </div>
+      </div>
+      <div class="section-header">
+        <span class="section-title">Retours clients</span>
+        <button class="btn btn-primary btn-sm" onclick="openQuestionnaireModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>Questionnaire client
+        </button>
+      </div>
+      <div id="kpiFeedbackList"></div>
+      <div id="kpiEmptyState" style="display:none">
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+          <div class="title">Aucun retour client</div>
+          <div class="desc">Envoyez un questionnaire à vos clients pour commencer à collecter des données.</div>
+          <button class="btn btn-primary" onclick="openQuestionnaireModal()">Envoyer un questionnaire</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: MAQUETTES ===== -->
+    <section class="page" data-page="maquettes" id="page-maquettes">
+      <div class="kpi-grid" id="maqKpiGrid"><!-- rendered --></div>
+      <div class="toolbar">
+        <div class="chip is-on" onclick="filterMaq('Tous',this)">Tous</div>
+        <div class="chip" onclick="filterMaq('Semi-remorque',this)">Semi-remorque</div>
+        <div class="chip" onclick="filterMaq('Porteur',this)">Porteur</div>
+        <div class="chip" onclick="filterMaq('VUL',this)">VUL</div>
+        <div class="sp"></div>
+        <button class="btn btn-ghost" onclick="importCSV('maquettes')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Importer un fond
+        </button>
+        <button class="btn btn-primary" onclick="openMaquetteModal()">+ Ajouter un fond</button>
+      </div>
+      <div class="grid-4" id="maquetteGrid"></div>
+    </section>
+
+    <!-- ===== PAGE: RÉSEAUX SOCIAUX ===== -->
+    <section class="page" data-page="social" id="page-social">
+      <div class="kpi-grid" id="socialKpiGrid"><!-- rendered --></div>
+      <div class="toolbar">
+        <div class="chip is-on" onclick="filterSocial('Tous',this)">Tous</div>
+        <div class="chip" onclick="filterSocial('Facebook',this)">Facebook</div>
+        <div class="chip" onclick="filterSocial('Instagram',this)">Instagram</div>
+        <div class="chip" onclick="filterSocial('LinkedIn',this)">LinkedIn</div>
+        <div class="sp"></div>
+        <button class="btn btn-ghost btn-sm" onclick="showFutureFeature('Connexion Meta API')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Connexion Meta API
+        </button>
+        <button class="btn btn-primary" onclick="openPostModal()">+ Ajouter un post</button>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>Réseau</th><th>Date</th><th>Thème</th><th>Statut</th>
+            <th>Portée</th><th>Impressions</th><th>Interactions</th><th>Engagement</th><th></th>
+          </tr></thead>
+          <tbody id="socialBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: ASSISTANT IA ===== -->
+    <section class="page" data-page="assistant" id="page-assistant">
+      <div class="ai-layout">
+        <div class="chat-area">
+          <div class="chat-header">
+            <div class="ai-avatar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 4-3 6-3 9H8c0-3-3-5-3-9a7 7 0 0 1 7-7z"/></svg>
+            </div>
+            <div style="flex:1">
+              <div style="font-size:14px;font-weight:700">Assistant Décoration IA</div>
+              <div style="font-size:11.5px;color:var(--ink-3);display:flex;align-items:center;gap:5px"><span class="ai-status"></span><span id="aiConnStatus">Moteur local · Données de l'application</span></div>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="clearChat()">Nouvelle conv.</button>
+          </div>
+          <div class="chat-msgs" id="chatMsgs">
+            <div class="msg">
+              <div class="msg-avatar msg-bot-av">IA</div>
+              <div class="msg-bubble">Bonjour 👋 Je suis l'assistant Décoration Lamberet. Je peux analyser vos réalisations, stocks adhésifs, KPI et maquettes. Posez-moi une question !</div>
+            </div>
+          </div>
+          <div class="chat-input-area">
+            <div class="chat-input-wrap">
+              <textarea class="chat-input" id="chatInput" placeholder="Posez votre question…" rows="1"></textarea>
+              <button class="chat-send" id="chatSend">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="ai-sidebar">
+          <div class="card card-pad">
+            <div class="section-header" style="margin-bottom:10px"><span class="section-title" style="font-size:13px">Questions suggérées</span></div>
+            <div class="ai-suggest-grid">
+              <div class="ai-suggest" onclick="askAI('Quels adhésifs sont en stock faible ?')">⚠️ Adhésifs en stock faible</div>
+              <div class="ai-suggest" onclick="askAI('Où se trouve l\'adhésif rouge ?')">📍 Où se trouve l'adhésif rouge ?</div>
+              <div class="ai-suggest" onclick="askAI('Quels fichiers contiennent PO ?')">📁 Fichiers contenant PO</div>
+              <div class="ai-suggest" onclick="askAI('Quels projets sont des porteurs ?')">🚛 Projets porteurs</div>
+              <div class="ai-suggest" onclick="askAI('Quels fonds de maquette sont obsolètes ?')">🖼️ Fonds de maquette obsolètes</div>
+              <div class="ai-suggest" onclick="askAI('Quels clients ont donné une note inférieure à 3 ?')">⭐ Clients note &lt; 3</div>
+              <div class="ai-suggest" onclick="askAI('Quels projets ont le plus de retouches ?')">🔁 Projets les plus retouchés</div>
+              <div class="ai-suggest" onclick="askAI('Quels fichiers ont été importés cette semaine ?')">🗓️ Fichiers importés cette semaine</div>
+              <div class="ai-suggest" onclick="askAI('Quels fournisseurs sont les plus utilisés ?')">🏭 Fournisseurs les plus utilisés</div>
+              <div class="ai-suggest" onclick="askAI('Donne-moi un résumé complet du secteur décoration.')">📊 Résumé complet</div>
+            </div>
+          </div>
+          <div class="card card-pad">
+            <div class="section-header" style="margin-bottom:10px"><span class="section-title" style="font-size:13px">Statut données</span></div>
+            <div id="aiDataStatus" style="display:flex;flex-direction:column;gap:6px;font-size:12px"></div>
+            <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line)">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin-bottom:8px">Connexion IA (Claude)</div>
+              <input id="aiEndpointInput" placeholder="https://votre-worker.workers.dev" style="width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-s);font-size:11.5px;font-family:var(--font-m);margin-bottom:6px">
+              <input id="aiTokenInput" type="password" placeholder="Jeton d'accès (optionnel)" style="width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-s);font-size:11.5px;font-family:var(--font-m);margin-bottom:8px">
+              <div style="display:flex;gap:6px">
+                <button class="btn btn-primary btn-sm" style="flex:1;justify-content:center" onclick="saveAIConfig()">Enregistrer</button>
+                <button class="btn btn-ghost btn-sm" onclick="testAIConnection()">Tester</button>
+              </div>
+              <div id="aiConfigStatus" style="font-size:11px;color:var(--ink-3);margin-top:8px;line-height:1.4">Sans connexion configurée, l'assistant répond avec le moteur local (recherche par mots-clés dans vos données).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: DIRECTION ===== -->
+    <section class="page" data-page="direction" id="page-direction">
+      <div style="background:linear-gradient(135deg,var(--brand),var(--brand-3));border-radius:var(--r-l);padding:24px 28px;color:#fff;margin-bottom:22px">
+        <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#8AACC8;margin-bottom:6px">Vue Direction</div>
+        <div style="font-family:var(--font-d);font-size:24px;font-weight:700;margin-bottom:4px">Performance — Secteur Décoration</div>
+        <div style="font-size:14px;color:#A8C4D8">Tableau de bord exécutif · Données temps réel via localStorage</div>
+      </div>
+      <div class="dir-overview" style="margin-bottom:22px" id="dirOverview"></div>
+      <div class="grid-2" style="margin-bottom:18px">
+        <div class="card card-pad">
+          <div class="section-header"><span class="section-title">Répartition par secteur</span></div>
+          <div id="dirSectors"></div>
+        </div>
+        <div class="card card-pad">
+          <div class="section-header"><span class="section-title">Points d'attention</span></div>
+          <div id="dirAlerts"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: DONNÉES ===== -->
+    <section class="page" data-page="donnees" id="page-donnees">
+      <div class="data-mgmt-grid">
+        <div class="data-card">
+          <div class="icon" style="background:var(--brand-soft);color:var(--brand)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+          <div class="name">Exporter tout</div>
+          <div class="desc">Télécharge toutes les données en JSON</div>
+          <button class="btn btn-brand" onclick="exportAllData()">Exporter JSON</button>
+        </div>
+        <div class="data-card">
+          <div class="icon" style="background:var(--success-soft);color:var(--success)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+          <div class="name">Importer données</div>
+          <div class="desc">Restaure depuis un fichier JSON</div>
+          <button class="btn btn-ghost" onclick="importAllData()">Importer JSON</button>
+        </div>
+        <div class="data-card">
+          <div class="icon" style="background:var(--danger-soft);color:var(--danger)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></div>
+          <div class="name">Réinitialiser</div>
+          <div class="desc">Supprime toutes les données locales</div>
+          <button class="btn btn-danger" onclick="confirmReset()">Réinitialiser</button>
+        </div>
+      </div>
+      <div class="card card-pad" style="margin-bottom:14px">
+        <div class="section-header"><span class="section-title">Import CSV par module</span></div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--surface-2);border-radius:var(--r-s)">
+            <span style="font-size:13px;font-weight:600">Adhésifs (CSV)</span>
+            <button class="btn btn-ghost btn-sm" onclick="importCSV('adhesifs')">Importer</button>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--surface-2);border-radius:var(--r-s)">
+            <span style="font-size:13px;font-weight:600">Réalisations (CSV)</span>
+            <button class="btn btn-ghost btn-sm" onclick="importCSV('realisations')">Importer</button>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--surface-2);border-radius:var(--r-s)">
+            <span style="font-size:13px;font-weight:600">KPI / Retours clients (CSV)</span>
+            <button class="btn btn-ghost btn-sm" onclick="importCSV('kpi')">Importer</button>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--surface-2);border-radius:var(--r-s)">
+            <span style="font-size:13px;font-weight:600">Publications réseaux sociaux (CSV)</span>
+            <button class="btn btn-ghost btn-sm" onclick="importCSV('social')">Importer</button>
+          </div>
+        </div>
+      </div>
+      <div class="card card-pad">
+        <div class="section-header"><span class="section-title">État du stockage</span></div>
+        <div id="storageStatus" style="display:flex;flex-direction:column;gap:8px;font-size:13px"></div>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: DOCUMENTS ===== -->
+    <section class="page" data-page="documents" id="page-documents">
+
+      <!-- KPI row -->
+      <div class="doc-kpi-row" id="docKpiRow" style="margin-bottom:14px"></div>
+
+      <!-- Batch action bar -->
+      <div class="batch-bar" id="batchBar">
+        <span id="batchCount">0 sélectionné(s)</span>
+        <div class="sp"></div>
+        <button class="btn btn-ghost btn-sm" style="color:#fff;border-color:rgba(255,255,255,.3)" onclick="batchDownload()">⬇ Télécharger</button>
+        <button class="btn btn-ghost btn-sm" style="color:#fff;border-color:rgba(255,255,255,.3)" onclick="batchExportZip()">📦 Exporter ZIP</button>
+        <button class="btn btn-ghost btn-sm" style="color:#fff;border-color:rgba(255,255,255,.3)" onclick="batchArchive()">🗄 Archiver</button>
+        <button class="btn btn-ghost btn-sm" style="color:#fff;border-color:rgba(255,255,255,.3);color:#fca5a5" onclick="batchDelete()">🗑 Supprimer</button>
+        <button class="btn btn-ghost btn-sm" style="color:#fff;border-color:rgba(255,255,255,.3)" onclick="clearDocSelection()">✕</button>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="toolbar" style="margin-bottom:12px">
+        <div class="search-box" style="width:280px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" placeholder="Nom, client, projet, tags, extension…" id="docSearch" oninput="filterDocs()">
+        </div>
+        <select id="docFilterExt" onchange="filterDocs()" style="padding:7px 10px;border:1px solid var(--line);border-radius:var(--r-s);font-size:12.5px;color:var(--ink-2);background:var(--surface)">
+          <option value="">Tous les formats</option>
+          <option>pdf</option><option>png</option><option>jpg</option><option>jpeg</option><option>svg</option>
+          <option>ai</option><option>eps</option><option>psd</option><option>tiff</option><option>webp</option>
+          <option>doc</option><option>docx</option><option>xls</option><option>xlsx</option><option>csv</option>
+          <option>ppt</option><option>pptx</option><option>zip</option><option>rar</option>
+          <option>mp4</option><option>mov</option><option>avi</option>
+        </select>
+        <select id="docFilterCat" onchange="filterDocs()" style="padding:7px 10px;border:1px solid var(--line);border-radius:var(--r-s);font-size:12.5px;color:var(--ink-2);background:var(--surface)">
+          <option value="">Toutes catégories</option>
+          <option>Réalisation</option><option>Maquette</option><option>Charte graphique</option>
+          <option>Brief</option><option>Devis</option><option>Contrat</option><option>Photo</option>
+          <option>Vidéo</option><option>Autre</option>
+        </select>
+        <select id="docFilterClient" onchange="filterDocs()" style="padding:7px 10px;border:1px solid var(--line);border-radius:var(--r-s);font-size:12.5px;color:var(--ink-2);background:var(--surface)">
+          <option value="">Tous les clients</option>
+        </select>
+        <div class="sp"></div>
+        <div class="seg">
+          <button class="is-on" id="docViewGrid" onclick="setDocView('grid',this)" title="Grille">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          </button>
+          <button id="docViewList" onclick="setDocView('list',this)" title="Liste">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          </button>
+        </div>
+        <button class="btn btn-ghost" onclick="exportDocsJSON()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exporter
+        </button>
+        <button class="btn btn-ghost" onclick="document.getElementById('fileImportDocsFolder').click()" title="Importer un dossier complet en conservant son organisation">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Importer un dossier
+        </button>
+        <button class="btn btn-primary" onclick="triggerDocImport()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>Importer
+        </button>
+      </div>
+
+      <!-- Main layout -->
+      <div class="doc-layout">
+        <!-- Left panel: tree nav -->
+        <div class="doc-sidebar">
+          <!-- Dropzone -->
+          <div class="dropzone" id="docDropzone" onclick="triggerDocImport()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <div class="dz-title">Glisser-déposer</div>
+            <div class="dz-desc">ou cliquer pour importer</div>
+            <div class="dz-ext">PDF · PNG · JPG · SVG · AI · EPS<br>PSD · TIFF · DOC · XLS · PPT<br>ZIP · MP4 · MOV · AVI</div>
+          </div>
+
+          <!-- Category tree -->
+          <div class="doc-tree-section">
+            <div class="doc-tree-head">Catégories</div>
+            <div class="doc-tree-item active" onclick="setDocCatFilter('',this)" id="doctree-all">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+              Tous les fichiers
+              <span class="doc-tree-count" id="dt-count-all">0</span>
+            </div>
+            <div class="doc-tree-item" onclick="setDocCatFilter('Réalisation',this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="14" rx="2"/></svg>
+              Réalisations
+              <span class="doc-tree-count" id="dt-count-real">0</span>
+            </div>
+            <div class="doc-tree-item" onclick="setDocCatFilter('Maquette',this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3 7 12 13 21 7"/></svg>
+              Maquettes
+              <span class="doc-tree-count" id="dt-count-maq">0</span>
+            </div>
+            <div class="doc-tree-item" onclick="setDocCatFilter('Charte graphique',this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9"/></svg>
+              Chartes graphiques
+              <span class="doc-tree-count" id="dt-count-charte">0</span>
+            </div>
+            <div class="doc-tree-item" onclick="setDocCatFilter('Brief',this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+              Briefs / Devis
+              <span class="doc-tree-count" id="dt-count-brief">0</span>
+            </div>
+            <div class="doc-tree-item" onclick="setDocCatFilter('Photo',this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Photos
+              <span class="doc-tree-count" id="dt-count-photo">0</span>
+            </div>
+            <div class="doc-tree-item" onclick="setDocCatFilter('Vidéo',this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+              Vidéos
+              <span class="doc-tree-count" id="dt-count-video">0</span>
+            </div>
+            <div class="doc-tree-item" onclick="setDocCatFilter('archived',this)" style="border-top:1px solid var(--line);margin-top:4px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/></svg>
+              Archives
+              <span class="doc-tree-count" id="dt-count-archive">0</span>
+            </div>
+            <div class="doc-tree-item" onclick="setDocCatFilter('favorites',this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              Favoris
+              <span class="doc-tree-count" id="dt-count-fav">0</span>
+            </div>
+          </div>
+
+          <!-- Quick stats -->
+          <div class="card card-pad" style="padding:12px 14px">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px">Par format</div>
+            <div id="docFormatStats" style="display:flex;flex-direction:column;gap:5px;font-size:12px"></div>
+          </div>
+        </div>
+
+        <!-- Right: file grid/list -->
+        <div class="doc-main">
+          <!-- Grid view -->
+          <div id="docGridView" class="doc-grid"></div>
+          <!-- List view -->
+          <div id="docListView" style="display:none;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);overflow:hidden">
+            <div class="doc-list-header">
+              <div></div><div></div><div>Nom</div><div>Catégorie</div>
+              <div>Client</div><div>Format</div><div>Taille</div><div>Importé le</div>
+            </div>
+            <div id="docListBody" style="overflow-y:auto;max-height:calc(100vh - 360px)"></div>
+          </div>
+          <div id="docEmptyState" style="display:none">
+            <div class="empty-state">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <div class="title">Aucun document</div>
+              <div class="desc">Glissez-déposez des fichiers ou cliquez pour importer.</div>
+              <button class="btn btn-primary" onclick="triggerDocImport()">Importer des fichiers</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: PLANNING ===== -->
+    <section class="page" data-page="planning" id="page-planning">
+      <input type="file" id="fileImportPlanning" accept=".xlsx,.xls,.csv" style="display:none" onchange="handlePlanningFile(this.files[0])">
+      <div id="planningEmpty">
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="3" x2="8" y2="6"/><line x1="16" y1="3" x2="16" y2="6"/></svg>
+          <div class="title">Aucun planning importé</div>
+          <div class="desc">Importez votre fichier Excel (.xlsx) de planning pour le visualiser, le modifier et l'imprimer ici.</div>
+          <button class="btn btn-primary" onclick="document.getElementById('fileImportPlanning').click()">Importer un fichier Excel</button>
+        </div>
+      </div>
+      <div id="planningContent" style="display:none">
+        <div class="plan-toolbar">
+          <div class="search-box" style="width:240px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" placeholder="Rechercher une tâche…" id="planSearch" oninput="planTableDebounced()">
+          </div>
+          <select id="planCatFilter" onchange="renderPlanningTable()" style="padding:7px 10px;border:1px solid var(--line);border-radius:var(--r-s);font-size:12.5px;color:var(--ink-2);background:var(--surface)">
+            <option value="">Toutes catégories</option>
+          </select>
+          <div class="sp"></div>
+          <button class="btn btn-ghost btn-sm" onclick="planAddRow()">+ Ligne</button>
+          <button class="btn btn-ghost btn-sm" onclick="planAddCol()">+ Colonne</button>
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('planColorInput').click()">🎨 Couleur cellule</button>
+          <input type="color" id="planColorInput" style="display:none" onchange="planApplyColor(this.value)">
+          <button class="btn btn-ghost btn-sm" onclick="printPlanning()">🖨️ Imprimer</button>
+          <button class="btn btn-ghost btn-sm" onclick="exportPlanningExcel()">Exporter Excel</button>
+          <button class="btn btn-ghost btn-sm" onclick="exportPlanningPDF()">Exporter PDF</button>
+          <button class="btn btn-primary btn-sm" onclick="document.getElementById('fileImportPlanning').click()">Réimporter</button>
+        </div>
+        <div class="plan-sheets" id="planSheetTabs"></div>
+        <div class="plan-table-wrap" id="planTableWrap"></div>
+        <div style="font-size:11px;color:var(--ink-3);margin-top:8px">💾 Modifications sauvegardées automatiquement dans le navigateur. Cliquez sur une cellule pour la modifier.</div>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: ROADMAP ===== -->
+    <section class="page" data-page="roadmap" id="page-roadmap">
+      <div class="card card-pad">
+        <div class="section-header"><span class="section-title">Roadmap Lamberet Decoration Hub</span></div>
+        <div id="roadmapList"></div>
+      </div>
+    </section>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- ===== DRAWER Détail adhésif ===== -->
+<div class="overlay" id="drawerOverlay" onclick="closeDrawer()">
+  <div class="drawer-panel" onclick="event.stopPropagation()">
+    <div class="drawer-top">
+      <div class="drawer-title" id="drawerTitle">Détail adhésif</div>
+      <button class="drawer-close" onclick="closeDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="drawer-body" id="drawerBody"></div>
+  </div>
+</div>
+
+<!-- ===== MODAL: Adhésif ===== -->
+<div class="modal-overlay" id="modal-adhesif" onclick="if(event.target===this)closeModal('adhesif')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-title" id="adhesifModalTitle">Ajouter un adhésif</div>
+      <button class="drawer-close" onclick="closeModal('adhesif')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="adhesifId">
+      <div class="field-row">
+        <div class="field"><label>Référence *</label><input type="text" id="adh_ref" placeholder="ex. ADH-3M-W-001"></div>
+        <div class="field"><label>Fournisseur *</label><select id="adh_supplier" onchange="document.getElementById('adh_supplier_other_wrap').style.display=this.value==='Autres'?'block':'none'"><option>Hesix</option><option>3M</option><option>Avery</option><option>Oracal</option><option>Hexis</option><option>Autres</option></select></div>
+      </div>
+      <div class="field" id="adh_supplier_other_wrap" style="display:none"><label>Préciser le fournisseur</label><input type="text" id="adh_supplier_other" placeholder="Nom du fournisseur"></div>
+      <div class="field"><label>Désignation *</label><input type="text" id="adh_name" placeholder="ex. Vinyle Blanc Mat Grand Froid"></div>
+      <div class="field-row">
+        <div class="field"><label>Couleur</label><input type="text" id="adh_color" placeholder="Blanc Mat"></div>
+        <div class="field"><label>Code couleur</label><input type="color" id="adh_colorHex" value="#FFFFFF" style="height:40px;padding:4px"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Largeur</label><input type="text" id="adh_width" placeholder="ex. 1520 mm"></div>
+        <div class="field"><label>Épaisseur</label><input type="text" id="adh_thickness" placeholder="ex. 75μm"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Zone</label><input type="text" id="adh_zone" placeholder="ex. Zone A"></div>
+        <div class="field"><label>Étagère / Rack</label><input type="text" id="adh_rack" placeholder="ex. Étagère 2"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Emplacement (code) *</label><input type="text" id="adh_loc" placeholder="ex. A-01"></div>
+        <div class="field"><label>Quantité (rouleaux) *</label><input type="number" id="adh_qty" placeholder="0" min="0"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Longueur restante (m)</label><input type="number" id="adh_length" placeholder="0" min="0"></div>
+        <div class="field"><label>Seuil d'alerte (rouleaux)</label><input type="number" id="adh_min" placeholder="5" min="0"></div>
+      </div>
+      <div class="field"><label>Commentaire</label><textarea id="adh_comment" placeholder="Remarques, conditions de stockage…"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('adhesif')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveAdhesif()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: Réalisation ===== -->
+<div class="modal-overlay" id="modal-realisation" onclick="if(event.target===this)closeModal('realisation')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-title" id="realModalTitle">Ajouter une réalisation</div>
+      <button class="drawer-close" onclick="closeModal('realisation')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="realId">
+      <div class="field-row">
+        <div class="field"><label>Client *</label><input type="text" id="real_client" placeholder="Nom du client"></div>
+        <div class="field"><label>Année</label><input type="number" id="real_year" placeholder="2024" value="2024"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Secteur d'activité</label><select id="real_sector"><option>Transport alimentaire</option><option>Logistique</option><option>Pharma</option><option>Distribution</option><option>Autre</option></select></div>
+        <div class="field"><label>Type de véhicule</label><select id="real_type"><option>Semi-remorque</option><option>Porteur</option><option>VUL</option><option>Fourgon frigorifique</option><option>Autre</option></select></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Nombre de véhicules</label><input type="number" id="real_qty" placeholder="1" min="1"></div>
+        <div class="field"><label>Statut</label><select id="real_status"><option>Terminé</option><option>En cours</option><option>Planifié</option></select></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Couleur principale</label><input type="color" id="real_color1" value="#0B3660" style="height:40px;padding:4px"></div>
+        <div class="field"><label>Couleur secondaire</label><input type="color" id="real_color2" value="#E8501A" style="height:40px;padding:4px"></div>
+      </div>
+      <div class="field"><label>Description du projet</label><textarea id="real_desc" placeholder="Description, matériaux, contraintes spécifiques…"></textarea></div>
+      <div class="field"><label>Tags (séparés par virgules)</label><input type="text" id="real_tags" placeholder="ex. Grand froid, Multi-véhicules, Bleu"></div>
+      <div class="field"><label>Image (URL ou laisser vide)</label><input type="text" id="real_img" placeholder="https://…"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('realisation')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveRealisation()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: KPI / Retour client ===== -->
+<div class="modal-overlay" id="modal-kpi" onclick="if(event.target===this)closeModal('kpi')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-title" id="kpiModalTitle">Ajouter un retour client</div>
+      <button class="drawer-close" onclick="closeModal('kpi')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="kpiId">
+      <div class="field-row">
+        <div class="field"><label>Client *</label><input type="text" id="kpi_client" placeholder="Nom du client"></div>
+        <div class="field"><label>Projet</label><input type="text" id="kpi_project" placeholder="Nom du projet"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Note /5</label><input type="number" id="kpi_note" min="1" max="5" step="0.5" placeholder="4.5"></div>
+        <div class="field"><label>Retouches demandées</label><input type="number" id="kpi_retouches" min="0" placeholder="0"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Délai validation (jours)</label><input type="number" id="kpi_delay" min="0" placeholder="3"></div>
+        <div class="field"><label>Date du retour</label><input type="date" id="kpi_date"></div>
+      </div>
+      <div class="field"><label>Commentaire client</label><textarea id="kpi_comment" placeholder="Verbatim du client…"></textarea></div>
+      <div class="field"><label>Nombre de véhicules</label><input type="number" id="kpi_vehicles" min="1" placeholder="1"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('kpi')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveKpi()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: Questionnaire ===== -->
+<div class="modal-overlay" id="modal-questionnaire" onclick="if(event.target===this)closeModal('questionnaire')">
+  <div class="modal" style="width:600px" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-title">Questionnaire de satisfaction client</div>
+      <button class="drawer-close" onclick="closeModal('questionnaire')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="field-row">
+        <div class="field"><label>Nom du client *</label><input type="text" id="q_client" placeholder="Nom du client"></div>
+        <div class="field"><label>Projet concerné</label><input type="text" id="q_project" placeholder="Projet / Commande"></div>
+      </div>
+      <div class="question-block">
+        <div class="question-label">1. Êtes-vous satisfait de la proposition visuelle ?</div>
+        <div class="radio-group" id="q_visuel_group">
+          <div class="radio-opt" onclick="selectRadio('q_visuel','Très satisfait',this)">Très satisfait</div>
+          <div class="radio-opt" onclick="selectRadio('q_visuel','Satisfait',this)">Satisfait</div>
+          <div class="radio-opt" onclick="selectRadio('q_visuel','Neutre',this)">Neutre</div>
+          <div class="radio-opt" onclick="selectRadio('q_visuel','Insatisfait',this)">Insatisfait</div>
+        </div>
+        <input type="hidden" id="q_visuel">
+      </div>
+      <div class="question-block">
+        <div class="question-label">2. La maquette respecte-t-elle votre identité de marque ?</div>
+        <div class="radio-group" id="q_identite_group">
+          <div class="radio-opt" onclick="selectRadio('q_identite','Oui, totalement',this)">Oui, totalement</div>
+          <div class="radio-opt" onclick="selectRadio('q_identite','Partiellement',this)">Partiellement</div>
+          <div class="radio-opt" onclick="selectRadio('q_identite','Non',this)">Non</div>
+        </div>
+        <input type="hidden" id="q_identite">
+      </div>
+      <div class="question-block">
+        <div class="question-label">3. Le délai de réponse vous convient-il ?</div>
+        <div class="radio-group" id="q_delai_group">
+          <div class="radio-opt" onclick="selectRadio('q_delai','Oui',this)">Oui</div>
+          <div class="radio-opt" onclick="selectRadio('q_delai','Acceptable',this)">Acceptable</div>
+          <div class="radio-opt" onclick="selectRadio('q_delai','Trop long',this)">Trop long</div>
+        </div>
+        <input type="hidden" id="q_delai">
+      </div>
+      <div class="question-block">
+        <div class="question-label">4. Avez-vous demandé des modifications ?</div>
+        <div class="radio-group" id="q_modifs_group">
+          <div class="radio-opt" onclick="selectRadio('q_modifs','Non, aucune',this)">Non, aucune</div>
+          <div class="radio-opt" onclick="selectRadio('q_modifs','1 à 2',this)">1 à 2</div>
+          <div class="radio-opt" onclick="selectRadio('q_modifs','3 à 5',this)">3 à 5</div>
+          <div class="radio-opt" onclick="selectRadio('q_modifs','Plus de 5',this)">Plus de 5</div>
+        </div>
+        <input type="hidden" id="q_modifs">
+      </div>
+      <div class="question-block">
+        <div class="question-label">5. Note globale sur 5</div>
+        <div class="rating-stars" id="q_note_stars">
+          <button class="star-btn" data-v="1" onclick="setStarRating(1)">★</button>
+          <button class="star-btn" data-v="2" onclick="setStarRating(2)">★</button>
+          <button class="star-btn" data-v="3" onclick="setStarRating(3)">★</button>
+          <button class="star-btn" data-v="4" onclick="setStarRating(4)">★</button>
+          <button class="star-btn" data-v="5" onclick="setStarRating(5)">★</button>
+        </div>
+        <input type="hidden" id="q_note" value="0">
+      </div>
+      <div class="field"><label>Commentaire libre</label><textarea id="q_comment" placeholder="Vos remarques, suggestions…"></textarea></div>
+      <div class="field-row">
+        <div class="field"><label>Nombre de véhicules</label><input type="number" id="q_vehicles" min="1" placeholder="1"></div>
+        <div class="field"><label>Type de véhicule</label><select id="q_vtype"><option>Semi-remorque</option><option>Porteur</option><option>VUL</option><option>Autre</option></select></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('questionnaire')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveQuestionnaire()">Enregistrer le retour</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: Maquette ===== -->
+<div class="modal-overlay" id="modal-maquette" onclick="if(event.target===this)closeModal('maquette')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-title" id="maqModalTitle">Ajouter un fond de maquette</div>
+      <button class="drawer-close" onclick="closeModal('maquette')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="maqId">
+      <div class="field"><label>Nom du template *</label><input type="text" id="maq_name" placeholder="ex. Semi-remorque Lamberet 2024"></div>
+      <div class="field-row">
+        <div class="field"><label>Type de véhicule *</label><select id="maq_type"><option>Semi-remorque</option><option>Porteur</option><option>VUL</option><option>Fourgon frigorifique</option><option>Citerne</option></select></div>
+        <div class="field"><label>Version</label><input type="text" id="maq_version" placeholder="v1.0"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Statut</label><select id="maq_status"><option>Actif</option><option>Obsolète</option><option>En révision</option></select></div>
+        <div class="field"><label>Format</label><input type="text" id="maq_format" placeholder="ex. AI, PDF, PSD"></div>
+      </div>
+      <div class="field"><label>Couleur de fond (prévisualisation)</label><input type="color" id="maq_color" value="#E8EEF6" style="height:40px;padding:4px"></div>
+      <div class="field"><label>Date de mise à jour</label><input type="date" id="maq_date"></div>
+      <div class="field"><label>Commentaire</label><textarea id="maq_comment" placeholder="Remarques, spécifications…"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('maquette')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveMaquette()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: Post social ===== -->
+<div class="modal-overlay" id="modal-post" onclick="if(event.target===this)closeModal('post')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-title" id="postModalTitle">Ajouter une publication</div>
+      <button class="drawer-close" onclick="closeModal('post')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="postId">
+      <div class="field-row">
+        <div class="field"><label>Réseau social *</label><select id="post_network"><option>Facebook</option><option>Instagram</option><option>LinkedIn</option></select></div>
+        <div class="field"><label>Date *</label><input type="date" id="post_date"></div>
+      </div>
+      <div class="field"><label>Thème du post *</label><input type="text" id="post_theme" placeholder="ex. Réalisation Jacky Perrenot"></div>
+      <div class="field-row">
+        <div class="field"><label>Statut</label><select id="post_status"><option>Publié</option><option>Programmé</option><option>Brouillon</option></select></div>
+        <div class="field"><label>Portée</label><input type="number" id="post_reach" min="0" placeholder="0"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Impressions</label><input type="number" id="post_impressions" min="0" placeholder="0"></div>
+        <div class="field"><label>Interactions</label><input type="number" id="post_interactions" min="0" placeholder="0"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Clics</label><input type="number" id="post_clicks" min="0" placeholder="0"></div>
+        <div class="field"><label>Abonnés gagnés</label><input type="number" id="post_followers" min="0" placeholder="0"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('post')">Annuler</button>
+      <button class="btn btn-primary" onclick="savePost()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: Zone ===== -->
+<div class="modal-overlay" id="modal-zone" onclick="if(event.target===this)closeModal('zone')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-title">Ajouter une zone de stockage</div>
+      <button class="drawer-close" onclick="closeModal('zone')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="field"><label>Nom de la zone *</label><input type="text" id="zone_name" placeholder="ex. Zone A — Adhésifs 3M"></div>
+      <div class="field"><label>Code zone</label><input type="text" id="zone_code" placeholder="ex. A"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('zone')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveZone()">Créer la zone</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: Emplacement ===== -->
+<div class="modal-overlay" id="modal-slot" onclick="if(event.target===this)closeModal('slot')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-title">Ajouter un emplacement</div>
+      <button class="drawer-close" onclick="closeModal('slot')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="field"><label>Zone *</label><select id="slot_zone"></select></div>
+      <div class="field"><label>Code emplacement *</label><input type="text" id="slot_code" placeholder="ex. A-01"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('slot')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveSlot()">Créer l'emplacement</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: Mouvement ===== -->
+<div class="modal-overlay" id="modal-mvt" onclick="if(event.target===this)closeModal('mvt')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-title">Enregistrer un mouvement</div>
+      <button class="drawer-close" onclick="closeModal('mvt')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="field"><label>Adhésif *</label><select id="mvt_adhesif"></select></div>
+      <div class="field-row">
+        <div class="field"><label>Type *</label><select id="mvt_type"><option value="in">Entrée</option><option value="out">Sortie</option></select></div>
+        <div class="field"><label>Quantité (rouleaux) *</label><input type="number" id="mvt_qty" min="1" placeholder="1"></div>
+      </div>
+      <div class="field"><label>Note</label><input type="text" id="mvt_note" placeholder="ex. Commande client XYZ"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('mvt')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveMvt()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: Détail réalisation ===== -->
+<div class="modal-overlay" id="modal-realDetail" onclick="if(event.target===this)closeModal('realDetail')">
+  <div class="modal" style="width:500px" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-title" id="realDetailTitle">Détail réalisation</div>
+      <button class="drawer-close" onclick="closeModal('realDetail')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" id="realDetailBody"></div>
+    <div class="modal-foot" id="realDetailFoot"></div>
+  </div>
+</div>
+
+<!-- Toast area -->
+<div id="toastArea"></div>
+
+<!-- Hidden file inputs -->
+<input type="file" id="fileImportJSON" accept=".json" style="display:none" onchange="handleImportJSON(this)">
+<input type="file" id="fileImportCSV" accept=".csv,.txt" style="display:none" onchange="handleImportCSV(this)">
+<input type="file" id="fileImportDocs" multiple style="display:none" accept="*" onchange="handleDocFiles(this.files)">
+<input type="file" id="fileImportDocsFolder" multiple webkitdirectory style="display:none" onchange="handleDocFiles(this.files)">
+
+<!-- ===== DOC PREVIEW MODAL ===== -->
+<div class="doc-preview-overlay" id="docPreviewOverlay" onclick="if(event.target===this)closeDocPreview()">
+  <div class="doc-preview-panel" onclick="event.stopPropagation()">
+    <div class="doc-preview-viewer" id="docPreviewViewer"></div>
+    <div class="doc-preview-info">
+      <div class="doc-preview-head">
+        <div>
+          <div class="doc-preview-name" id="dpName">—</div>
+          <div style="font-size:11.5px;color:var(--ink-3);margin-top:2px" id="dpMeta">—</div>
+        </div>
+        <button class="drawer-close" onclick="closeDocPreview()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="doc-preview-body">
+        <div class="meta-group">
+          <label>Nom du fichier</label>
+          <input class="meta-input" id="dp_name" placeholder="Nom du fichier" onchange="updateDocMeta('name',this.value)">
+        </div>
+        <div class="meta-group">
+          <label>Client associé</label>
+          <input class="meta-input" id="dp_client" placeholder="Nom du client" list="dp_client_list" onchange="updateDocMeta('client',this.value)">
+          <datalist id="dp_client_list"></datalist>
+        </div>
+        <div class="meta-group">
+          <label>Projet</label>
+          <input class="meta-input" id="dp_project" placeholder="Nom du projet" onchange="updateDocMeta('project',this.value)">
+        </div>
+        <div class="meta-group">
+          <label>Catégorie</label>
+          <select class="meta-select" id="dp_category" onchange="updateDocMeta('category',this.value)">
+            <option>Réalisation</option><option>Maquette</option><option>Charte graphique</option>
+            <option>Brief</option><option>Devis</option><option>Contrat</option><option>Photo</option>
+            <option>Vidéo</option><option>Autre</option>
+          </select>
+        </div>
+        <div class="meta-group">
+          <label>Tags (virgule)</label>
+          <input class="meta-input" id="dp_tags" placeholder="bleu, porteur, 2024…" onchange="updateDocMeta('tags',this.value)">
+        </div>
+        <div class="meta-group">
+          <label>Description</label>
+          <textarea class="meta-input" id="dp_desc" rows="3" placeholder="Description libre…" onchange="updateDocMeta('desc',this.value)" style="resize:vertical"></textarea>
+        </div>
+        <div class="meta-group">
+          <label>Auteur</label>
+          <input class="meta-input" id="dp_author" placeholder="Nom de l'auteur" onchange="updateDocMeta('author',this.value)">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="meta-group">
+            <label>Type véhicule</label>
+            <select class="meta-select" id="dp_vehicle" onchange="updateDocMeta('vehicle',this.value)">
+              <option value="">—</option><option>Semi-remorque</option><option>Porteur</option>
+              <option>VUL</option><option>Fourgon</option><option>Citerne</option>
+            </select>
+          </div>
+          <div class="meta-group">
+            <label>Année</label>
+            <input class="meta-input" id="dp_year" type="number" placeholder="2024" onchange="updateDocMeta('year',this.value)">
+          </div>
+        </div>
+      </div>
+      <div class="doc-preview-foot">
+        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="saveDocMeta()">💾 Sauvegarder</button>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost btn-sm" style="flex:1;justify-content:center" onclick="downloadDoc()">⬇ Télécharger</button>
+          <button class="btn btn-ghost btn-sm" style="flex:1;justify-content:center" onclick="toggleDocFav()">⭐ Favori</button>
+          <button class="btn btn-ghost btn-sm" style="flex:1;justify-content:center;color:var(--danger)" onclick="archiveDoc()">🗄 Archiver</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== AUTO-CLASSIFY MODAL ===== -->
+<div class="modal-overlay" id="modal-classify" onclick="if(event.target===this)closeModal('classify')">
+  <div class="modal" style="width:700px" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-title">Classement automatique détecté</div>
+      <button class="drawer-close" onclick="closeModal('classify')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" style="max-height:60vh;overflow-y:auto">
+      <div style="font-size:13px;color:var(--ink-2);margin-bottom:12px">L'application a analysé les noms de fichiers et propose un classement. Corrigez si nécessaire, puis confirmez.</div>
+      <div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);font-weight:600;display:grid;grid-template-columns:32px 1fr 120px 120px 90px;gap:10px;padding:0 0 8px">
+        <div></div><div>Fichier</div><div>Client</div><div>Catégorie</div><div>Année</div>
+      </div>
+      <div id="classifyList"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('classify')">Annuler</button>
+      <button class="btn btn-primary" onclick="confirmClassify()">✅ Confirmer l'import</button>
+    </div>
+  </div>
+</div>
+
+<!-- Core -->
+<script src="js/core/store.js"></script>
+<script src="js/core/navigation.js"></script>
+<script src="js/core/helpers.js"></script>
+<!-- Modules -->
+<script src="js/modules/dashboard.js"></script>
+<script src="js/modules/adhesifs.js"></script>
+<script src="js/modules/realisations.js"></script>
+<script src="js/modules/kpi.js"></script>
+<script src="js/modules/social.js"></script>
+<script src="js/modules/maquettes.js"></script>
+<script src="js/modules/assistant.js"></script>
+<script src="js/modules/direction.js"></script>
+<script src="js/modules/donnees.js"></script>
+<script src="js/modules/roadmap.js"></script>
+<script src="js/modules/documents.js"></script>
+<script src="js/modules/planning.js"></script>
+<!-- Boot -->
+<script src="js/app.js"></script>
+</body>
+</html>
