@@ -60,29 +60,35 @@ js/app.js    → vérifie la session puis démarre l'app (boot)
 
 ## Déploiement (docker-compose)
 
-```bash
-cp .env.example .env
+Toutes les valeurs (secret de session + identifiants admin) sont directement dans `docker-compose.yml`, pas besoin de créer de fichier `.env`.
+
+**Avant le premier lancement**, ouvre `docker-compose.yml` avec un éditeur de texte et modifie ces 3 lignes (service `backend` → `environment`) :
+
+```yaml
+JWT_SECRET: "lamberet2026-secret-xk29fj28fjs-change-moi"
+ADMIN_EMAIL: "toi@lamberet.fr"
+ADMIN_PASSWORD: "change-moi-avant-le-premier-lancement"
 ```
 
-Édite le fichier `.env` et remplis **3 valeurs** :
+Remplace-les par tes propres valeurs, par exemple :
 
-```
-JWT_SECRET=une-valeur-aleatoire-longue    # génère-la avec : openssl rand -base64 48
-ADMIN_EMAIL=toi@lamberet.fr
-ADMIN_PASSWORD=un-mot-de-passe-solide
+```yaml
+JWT_SECRET: "un-secret-long-et-aleatoire-a-toi"
+ADMIN_EMAIL: "youssef@lamberet.fr"
+ADMIN_PASSWORD: "MonMotDePasse2026"
 ```
 
-Puis lance :
+Sauvegarde, puis lance :
 
 ```bash
 docker compose up -d --build
 ```
 
-Le compte admin est **créé automatiquement au démarrage** à partir de `ADMIN_EMAIL`/`ADMIN_PASSWORD` — pas besoin de commande supplémentaire. Connecte-toi directement sur `http://<adresse-du-serveur>:8080` avec ces identifiants.
+Le compte admin est **créé automatiquement au démarrage** avec l'email/mot de passe ci-dessus. Connecte-toi directement sur `http://<adresse-du-serveur>:8080`.
 
 Depuis l'app (page **Direction** → panneau « Comptes équipe »), tu peux ensuite créer les comptes du reste de l'équipe et choisir leur rôle.
 
-> Tu peux laisser `ADMIN_EMAIL`/`ADMIN_PASSWORD` dans le `.env` en permanence : au redémarrage du conteneur, le mot de passe n'est réécrit que si tu changes cette valeur dans `.env` — donc si tu changes ton mot de passe depuis l'app, il ne sera pas écrasé au prochain redémarrage tant que le `.env` ne change pas lui aussi.
+> Si tu changes ton mot de passe depuis l'app plus tard, ne relance pas `docker compose up --build` avec l'ancien `ADMIN_PASSWORD` resté dans le fichier — ça réécrirait le mot de passe. Mets à jour la valeur dans `docker-compose.yml` si tu veux la garder synchronisée, ou laisse le champ tel quel si tu ne comptes plus t'en servir pour te reconnecter.
 
 Sans passer par l'UI, tu peux aussi créer des comptes directement en API :
 

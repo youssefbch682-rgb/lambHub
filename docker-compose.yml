@@ -7,11 +7,12 @@ services:
     environment:
       PORT: 4000
       DB_PATH: /app/data/lamberet-hub.db
-      JWT_SECRET: ${JWT_SECRET}
-      ADMIN_EMAIL: ${ADMIN_EMAIL}
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      # ⚠️ Modifie ces 3 valeurs avant de lancer "docker compose up" :
+      JWT_SECRET: "lamberet2026-secret-xk29fj28fjs-change-moi"
+      ADMIN_EMAIL: "admin@lamberet.fr"
+      ADMIN_PASSWORD: "admin"
     volumes:
-      - lamberet_hub_data:/app/data   # la base SQLite survit aux redéploiements
+      - /docker/lamberet_hub_data:/app/data   # la base SQLite survit aux redéploiements
     networks:
       - lamberet-hub
 
