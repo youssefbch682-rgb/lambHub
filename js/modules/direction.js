@@ -34,5 +34,6 @@ function renderDirection(){
   const colors={success:'var(--success)',warn:'var(--warn)',info:'var(--info)'};
   const bgs={success:'var(--success-soft)',warn:'var(--warn-soft)',info:'var(--info-soft)'};
   alertEl.innerHTML=items.map(i=>`<div style="padding:12px 14px;background:${bgs[i.type]};border-radius:var(--r-m);border:1px solid ${colors[i.type]};margin-bottom:8px"><div style="font-size:12px;font-weight:700;color:${colors[i.type]};margin-bottom:2px">${i.title}</div><div style="font-size:12px;color:var(--ink-2)">${i.desc}</div></div>`).join('')||'<div style="color:var(--ink-3);font-size:13px;padding:10px">Aucune alerte</div>';
+  renderAccountsPanel();
 }
 

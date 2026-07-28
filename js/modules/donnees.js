@@ -209,15 +209,15 @@ function parseCsvText(text){
 }
 
 function confirmReset(){
-  showConfirm('⚠️ Réinitialiser toutes les données ?','Cette action supprime toutes les données locales (y compris documents et planning) de façon irréversible.',()=>{
-    Object.values(KEYS).forEach(k=>localStorage.removeItem(k));
+  showConfirm('⚠️ Réinitialiser toutes les données ?','Cette action supprime toutes les données du serveur (y compris documents et planning) de façon irréversible, pour tout le monde.',async()=>{
+    await Promise.all(RESOURCES.map(r=>Api.putResourceAll(r,[]).catch(()=>{})));
     docsCache=[];planningStore=null;
-    IDB.clearDocs().catch(()=>{});
-    IDB.kvDelete('planning').catch(()=>{});
-    loadAllData();
+    await IDB.clearDocs().catch(()=>{});
+    await IDB.kvDelete('planning').catch(()=>{});
+    await loadAllData();
     renderDashboard();renderDonnees();
     updateDocBadge();
-    showToast('Données réinitialisées','success');
+    showToast('Données réinitialisées pour tous les utilisateurs','success');
   });
 }
 

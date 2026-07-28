@@ -9,17 +9,8 @@ let planLastCell=null; // {r,c}
 async function initPlanning(){
   try{
     const v=await IDB.kvGet('planning');
-    if(v!=null){ planningStore=v; return; }
-  }catch(e){ console.warn('[Planning] lecture IndexedDB impossible',e); }
-  // Migration one-shot depuis localStorage
-  try{
-    const raw=localStorage.getItem(KEYS.planning);
-    if(raw){
-      planningStore=JSON.parse(raw)||null;
-      if(planningStore)await IDB.kvSet('planning',planningStore);
-      localStorage.removeItem(KEYS.planning);
-    }
-  }catch(e){ planningStore=null; }
+    planningStore=v!=null?v:null;
+  }catch(e){ console.warn('[Planning] lecture serveur impossible',e); planningStore=null; }
 }
 function loadPlanning(){ /* no-op : planningStore est déjà en mémoire (chargé par initPlanning au démarrage) */ }
 function savePlanning(){ IDB.kvSet('planning',planningStore).then(()=>broadcastSync('planning')).catch(e=>storageError(e,'planning:save')); }

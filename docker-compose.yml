@@ -1,0 +1,35 @@
+services:
+  backend:
+    build:
+      context: ./server
+    container_name: lamberet-hub-backend
+    restart: unless-stopped
+    environment:
+      PORT: 4000
+      DB_PATH: /app/data/lamberet-hub.db
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    volumes:
+      - lamberet_hub_data:/app/data   # la base SQLite survit aux redéploiements
+    networks:
+      - lamberet-hub
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: lamberet-hub-frontend
+    restart: unless-stopped
+    ports:
+      - "8080:80"   # accès : http://<serveur-lamberet>:8080
+    depends_on:
+      - backend
+    networks:
+      - lamberet-hub
+
+networks:
+  lamberet-hub:
+
+volumes:
+  lamberet_hub_data:   # ← c'est CE volume qu'il faut sauvegarder (voir README)

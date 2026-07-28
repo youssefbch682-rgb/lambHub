@@ -416,7 +416,7 @@
       <div style="background:linear-gradient(135deg,var(--brand),var(--brand-3));border-radius:var(--r-l);padding:24px 28px;color:#fff;margin-bottom:22px">
         <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#8AACC8;margin-bottom:6px">Vue Direction</div>
         <div style="font-family:var(--font-d);font-size:24px;font-weight:700;margin-bottom:4px">Performance — Secteur Décoration</div>
-        <div style="font-size:14px;color:#A8C4D8">Tableau de bord exécutif · Données temps réel via localStorage</div>
+        <div style="font-size:14px;color:#A8C4D8">Tableau de bord exécutif · Données temps réel via l'API</div>
       </div>
       <div class="dir-overview" style="margin-bottom:22px" id="dirOverview"></div>
       <div class="grid-2" style="margin-bottom:18px">
@@ -429,7 +429,39 @@
           <div id="dirAlerts"></div>
         </div>
       </div>
+
+      <!-- Gestion des comptes — visible et actionnable uniquement pour le rôle admin -->
+      <div class="card card-pad" id="accountsPanel" style="display:none">
+        <div class="section-header">
+          <span class="section-title">Comptes équipe</span>
+          <button class="btn btn-primary btn-sm" onclick="openCreateAccountModal()">+ Nouveau compte</button>
+        </div>
+        <div id="accountsList"></div>
+      </div>
     </section>
+
+    <!-- Modale création de compte -->
+    <div class="modal-overlay" id="modal-account" onclick="if(event.target===this)closeModal('account')">
+      <div class="modal" style="width:380px">
+        <div class="modal-head">
+          <span class="modal-title">Nouveau compte</span>
+          <button class="drawer-close" onclick="closeModal('account')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="modal-body">
+          <form id="accountForm" onsubmit="submitCreateAccount(event)">
+            <input type="email" id="accEmail" placeholder="email@lamberet.fr" required style="width:100%;padding:10px 12px;margin-bottom:10px;border:1px solid var(--line);border-radius:var(--r-s)">
+            <input type="password" id="accPassword" placeholder="Mot de passe temporaire" required minlength="6" style="width:100%;padding:10px 12px;margin-bottom:10px;border:1px solid var(--line);border-radius:var(--r-s)">
+            <select id="accRole" style="width:100%;padding:10px 12px;margin-bottom:14px;border:1px solid var(--line);border-radius:var(--r-s)">
+              <option value="lecteur">Lecteur — consultation seule</option>
+              <option value="editeur" selected>Éditeur — lecture + écriture</option>
+              <option value="admin">Admin — + gestion des comptes</option>
+            </select>
+            <button type="submit" class="btn btn-primary" style="width:100%">Créer le compte</button>
+            <div id="accountFormError" style="margin-top:8px;color:var(--danger);font-size:12.5px"></div>
+          </form>
+        </div>
+      </div>
+    </div>
 
     <!-- ===== PAGE: DONNÉES ===== -->
     <section class="page" data-page="donnees" id="page-donnees">
@@ -1113,6 +1145,8 @@
 </div>
 
 <!-- Core -->
+<script src="js/core/api.js"></script>
+<script src="js/core/authUI.js"></script>
 <script src="js/core/store.js"></script>
 <script src="js/core/navigation.js"></script>
 <script src="js/core/helpers.js"></script>
@@ -1125,6 +1159,7 @@
 <script src="js/modules/maquettes.js"></script>
 <script src="js/modules/assistant.js"></script>
 <script src="js/modules/direction.js"></script>
+<script src="js/modules/accounts.js"></script>
 <script src="js/modules/donnees.js"></script>
 <script src="js/modules/roadmap.js"></script>
 <script src="js/modules/documents.js"></script>

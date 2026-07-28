@@ -11,26 +11,11 @@
 // NAS/Win:  fetch('/api/upload', { method:'POST', body: formData })
 let docsCache=[];
 const DocStorage = {
-  // À appeler une fois au démarrage (voir INIT). Charge IndexedDB en mémoire
-  // et migre automatiquement les documents historiques stockés en localStorage.
+  // À appeler une fois au démarrage (voir INIT). Charge les documents
+  // depuis le backend (table `documents` en SQLite) en mémoire.
   async init(){
     try{ docsCache=await IDB.getAllDocs(); }
-    catch(e){ storageError(e,'documents:init'); docsCache=[]; return; }
-    // Migration one-shot depuis l'ancien stockage localStorage
-    try{
-      const raw=localStorage.getItem(KEYS.documents);
-      if(raw){
-        const legacy=JSON.parse(raw)||[];
-        const known=new Set(docsCache.map(d=>d.id));
-        const toMigrate=legacy.filter(d=>!known.has(d.id));
-        if(toMigrate.length){
-          await IDB.putDocs(toMigrate);
-          docsCache=docsCache.concat(toMigrate);
-        }
-        localStorage.removeItem(KEYS.documents); // libère le quota localStorage
-        if(toMigrate.length)showToast(`📦 ${toMigrate.length} document(s) migré(s) vers le nouveau stockage`,'success');
-      }
-    }catch(e){ console.warn('[DocStorage] migration localStorage ignorée',e); }
+    catch(e){ storageError(e,'documents:init'); docsCache=[]; }
   },
   getAll(){ return docsCache; },
   saveAll(docs){
