@@ -503,3 +503,69 @@ function renderMovements(){
   }).join('');
 }
 
+// ============================================================
+// EXPORT PDF — état du stock trié par référence, pour envoi à la hiérarchie
+// ============================================================
+function exportStockPDF(){
+  if(typeof window.jspdf==='undefined'){
+    showToast('Bibliothèque PDF non chargée — vérifiez la connexion internet','error');
+    return;
+  }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation:'landscape', unit:'mm', format:'a4' });
+
+  // Tri par référence (alphanumérique, valeurs vides à la fin)
+  const rows = adhesifs.slice().sort((a,b)=>{
+    const ra=(a.ref||'').toString(), rb=(b.ref||'').toString();
+    if(!ra) return 1; if(!rb) return -1;
+    return ra.localeCompare(rb,'fr',{numeric:true});
+  });
+
+  const totalQty = rows.reduce((s,a)=>s+(+a.qty||0),0);
+  const lowCount = rows.filter(a=>+a.qty<=(+a.min||5)&&+a.qty>0).length;
+  const emptyCount = rows.filter(a=>+a.qty===0).length;
+
+  // En-tête du document
+  doc.setFontSize(16); doc.setFont(undefined,'bold');
+  doc.text('Lamberet — État du stock adhésifs',14,16);
+  doc.setFontSize(10); doc.setFont(undefined,'normal'); doc.setTextColor(100);
+  const now=new Date();
+  doc.text(`Généré le ${now.toLocaleDateString('fr-FR')} à ${now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}`,14,22);
+  doc.text(`${rows.length} référence(s) · ${totalQty} rouleau(x) au total · ${lowCount} en stock faible · ${emptyCount} en rupture`,14,27);
+
+  // Tableau
+  doc.autoTable({
+    startY: 33,
+    head: [['Référence','Désignation','Couleur','Fournisseur','Zone','Étagère','Qté','Seuil min.','Statut']],
+    body: rows.map(a=>{
+      const qty=+a.qty||0, min=+a.min||5;
+      const status = qty===0 ? 'Rupture' : qty<=min ? 'Stock faible' : 'Normal';
+      return [a.ref||'—',a.name||'—',a.color||'—',a.supplier||'—',a.zone||'—',a.rack||'—',String(qty),String(min),status];
+    }),
+    styles:{ fontSize:8.5, cellPadding:2.2 },
+    headStyles:{ fillColor:[26,58,92], textColor:255, fontStyle:'bold' },
+    alternateRowStyles:{ fillColor:[246,248,250] },
+    columnStyles:{ 6:{halign:'right'}, 7:{halign:'right'} },
+    didParseCell: function(data){
+      // Colore la colonne Statut selon la valeur
+      if(data.section==='body' && data.column.index===8){
+        const v=data.cell.raw;
+        if(v==='Rupture'){ data.cell.styles.textColor=[200,40,40]; data.cell.styles.fontStyle='bold'; }
+        else if(v==='Stock faible'){ data.cell.styles.textColor=[190,120,20]; data.cell.styles.fontStyle='bold'; }
+        else { data.cell.styles.textColor=[30,140,90]; }
+      }
+    },
+    margin:{ left:14, right:14 }
+  });
+
+  // Pied de page avec pagination
+  const pageCount = doc.internal.getNumberOfPages();
+  for(let i=1;i<=pageCount;i++){
+    doc.setPage(i);
+    doc.setFontSize(8); doc.setTextColor(150);
+    doc.text(`Page ${i}/${pageCount} — Lamberet Decoration Hub`,14,doc.internal.pageSize.getHeight()-8);
+  }
+
+  doc.save(`lamberet-stock-adhesifs-${now.toISOString().slice(0,10)}.pdf`);
+  showToast('PDF du stock généré','success');
+}
