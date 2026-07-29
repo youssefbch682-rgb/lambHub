@@ -23,7 +23,7 @@ services:
     container_name: lamberet-hub-frontend
     restart: unless-stopped
     ports:
-      - "8080:80"   # accès : http://<serveur-lamberet>:8080
+      - "355:80"   # accès : http://<serveur-lamberet>:8080
     depends_on:
       - backend
     networks:
@@ -33,7 +33,7 @@ networks:
   lamberet-hub:
     ipam:
       config:
-        - subnet: 172.28.0.0/16
-
+        - subnet: 172.33.0.0/16
+        
 volumes:
   lamberet_hub_data:   # ← c'est CE volume qu'il faut sauvegarder (voir README)
